@@ -1,24 +1,36 @@
-const links = (
-  <>
-    <li>
-      <a href="/">home</a>
-    </li>
-    <li>
-      <a href="/products">products</a>
-    </li>
-    <li>
-      <a href="/dashboard">dashboard</a>
-    </li>
-    <li>
-      <a href="/">about</a>
-    </li>
-    <li>
-      <a href="/">contact</a>
-    </li>
-  </>
-);
+import {
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  Show,
+  useAuth,
+} from "@clerk/react";
+import { Link } from "react-router";
 
 const NavBar = () => {
+  const { isSignedIn } = useAuth();
+
+  const links = (
+    <>
+      <li>
+        <Link to="/">home</Link>
+      </li>
+      <li>
+        <Link to="/products">products</Link>
+      </li>
+      {isSignedIn && (
+        <li>
+          <Link to="/dashboard">dashboard</Link>
+        </li>
+      )}
+      <li>
+        <Link to="/">about</Link>
+      </li>
+      <li>
+        <Link to="/">contact</Link>
+      </li>
+    </>
+  );
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -54,8 +66,19 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1 *:capitalize">{links}</ul>
       </div>
       <div className="navbar-end space-x-2">
-        <a className="btn btn-success text-white">Log in</a>
-        <a className="btn btn-outline">Sign up</a>
+        <Show when="signed-out">
+          {/* <Link to={"/auth/login"} className="btn btn-success text-white">
+            Log in
+          </Link>
+          <Link to={"/auth/signup"} className="btn btn-outline">
+            Sign up
+          </Link> */}
+          <SignInButton />
+          <SignUpButton />
+        </Show>
+        <Show when="signed-in">
+          <UserButton />
+        </Show>
       </div>
     </div>
   );

@@ -60,21 +60,21 @@ const NavBar = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Bazar-Shazar</a>
+        <Link to={"/"} className="btn btn-ghost text-xl">
+          Bazar-Shazar
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 *:capitalize">{links}</ul>
       </div>
       <div className="navbar-end space-x-2">
         <Show when="signed-out">
-          {/* <Link to={"/auth/login"} className="btn btn-success text-white">
-            Log in
-          </Link>
-          <Link to={"/auth/signup"} className="btn btn-outline">
-            Sign up
-          </Link> */}
-          <SignInButton />
-          <SignUpButton />
+          <SignInButton>
+            <button className="btn btn-primary">Login</button>
+          </SignInButton>
+          <SignUpButton>
+            <button className="btn">Sign up</button>
+          </SignUpButton>
         </Show>
         <Show when="signed-in">
           <UserButton />

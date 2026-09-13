@@ -12,16 +12,21 @@ import {
   Boxes,
   Plus,
 } from "lucide-react";
+import { useUser } from "@clerk/react";
 
 const CreateProductPage = () => {
   const { register, handleSubmit, reset, watch } = useForm();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  const { user } = useUser();
+  const userEmail = user.primaryEmailAddress.emailAddress;
+  // console.log(user);
+  // console.log(userEmail);
 
   const imageUrl = watch("image");
 
   const handleCreateProduct = (data) => {
-    // console.log(data);
+    console.log(data);
     setSubmitting(true);
     axios
       .post("http://localhost:3000/products", data)
@@ -104,10 +109,40 @@ const CreateProductPage = () => {
                   Product name
                 </label>
                 <input
-                  {...register("name")}
+                  {...register("productName")}
                   className="input input-bordered w-full"
                   type="text"
                   placeholder="e.g. Wireless Mouse"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="mb-1 flex items-center gap-1.5 text-sm font-medium text-base-content">
+                  <Package size={15} className="text-base-content/50" />
+                  Owner name
+                </label>
+                <input
+                  {...register("ownerName")}
+                  className="input input-bordered w-full"
+                  type="text"
+                  placeholder="e.g. mr/mrs.xyz"
+                  defaultValue={user.fullName}
+                  readOnly
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="mb-1 flex items-center gap-1.5 text-sm font-medium text-base-content">
+                  <Package size={15} className="text-base-content/50" />
+                  Owner Email
+                </label>
+                <input
+                  {...register("ownerEmail")}
+                  className="input input-bordered w-full"
+                  type="text"
+                  placeholder="e.g. mr/mrs.xyz"
+                  defaultValue={userEmail}
+                  readOnly
                 />
               </div>
 

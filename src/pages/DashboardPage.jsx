@@ -1,20 +1,20 @@
 import { Link } from "react-router";
 import { PlusCircle, PackageSearch, ArrowUpRight } from "lucide-react";
-import { useAuth, useUser } from "@clerk/react";
+import { useUser } from "@clerk/react";
 
 const DashboardPage = () => {
-  const user = useUser();
-  const auth = useAuth();
+  const { user } = useUser();
+  // const auth = useAuth();
   console.log("this is from useUser hook", user);
-  console.log("this is from useAuth hook", auth);
-  
+  // console.log("this is from useAuth hook", auth);
+
   return (
     <div className="min-h-screen bg-base-200/50 px-4 py-10">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-semibold text-base-content">
-            Welcome to the dashboard
+            Welcome to the dashboard {user.fullName}
           </h1>
           <p className="mt-2 text-sm text-base-content/60">
             Manage your product catalog from here

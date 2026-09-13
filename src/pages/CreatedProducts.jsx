@@ -3,16 +3,22 @@ import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Eye, Trash2, PackageSearch, ImageIcon } from "lucide-react";
+import { useUser } from "@clerk/react";
 
 const CreatedProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user, isLoaded } = useUser();
+  console.log(user);
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  console.log("ther user email is", userEmail);
 
   useEffect(() => {
+    if (!isLoaded || !userEmail) return;
+
     axios
-      .get("http://localhost:3000/products")
+      .get(`http://localhost:3000/products?email=${userEmail}`)
       .then((res) => {
-        // console.log(res.data);
         setProducts(res.data);
       })
       .catch((err) => {
@@ -21,7 +27,7 @@ const CreatedProducts = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [isLoaded, userEmail]);
 
   const handleDelete = (id) => {
     // console.log(id);
@@ -98,7 +104,7 @@ const CreatedProducts = () => {
                             {product.image ? (
                               <img
                                 src={product.image}
-                                alt={product.name}
+                                alt={product.productName}
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
                                   e.currentTarget.style.display = "none";
@@ -112,7 +118,7 @@ const CreatedProducts = () => {
                             )}
                           </div>
                           <span className="font-medium text-base-content">
-                            {product.name}
+                            {product.productName}
                           </span>
                         </div>
                       </td>

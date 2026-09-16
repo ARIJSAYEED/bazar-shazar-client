@@ -4,9 +4,6 @@ import { useUser } from "@clerk/react";
 
 const DashboardPage = () => {
   const { user } = useUser();
-  // const auth = useAuth();
-  console.log("this is from useUser hook", user);
-  // console.log("this is from useAuth hook", auth);
 
   return (
     <div className="min-h-screen bg-base-200/50 px-4 py-10">

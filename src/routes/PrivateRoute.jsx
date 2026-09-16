@@ -1,6 +1,6 @@
-import { useAuth } from "@clerk/react";
-import Loading from "../components/reuseable-components/Loading";
 import { Navigate } from "react-router";
+import Loading from "../components/reuseable-components/Loading";
+import { useAuth } from "@clerk/react";
 
 const PrivateRoute = ({ children }) => {
   const { isSignedIn, isLoaded } = useAuth();
@@ -8,7 +8,7 @@ const PrivateRoute = ({ children }) => {
     return <Loading></Loading>;
   }
   if (!isSignedIn) {
-    return <Navigate to="/"></Navigate>;
+    return <Navigate to="/sign-in" replace />;
   }
   return children;
 };

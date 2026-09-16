@@ -8,6 +8,8 @@ import {
   UserRound,
   PackageSearch,
 } from "lucide-react";
+import Loading from "../components/reuseable-components/Loading";
+import { Link } from "react-router";
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -50,9 +52,10 @@ const ProductPage = () => {
 
         {/* Content */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-3 py-24">
-            <span className="loading loading-spinner loading-md text-primary"></span>
-            <p className="text-sm text-base-content/50">Fetching products…</p>
+          <div>
+            {/* <span className="loading loading-spinner loading-md text-primary"></span>
+            <p className="text-sm text-base-content/50">Fetching products…</p> */}
+            <Loading></Loading>
           </div>
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-base-300 bg-base-100 py-24 text-center">
@@ -91,9 +94,14 @@ const ProductPage = () => {
 
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <h2 className="font-semibold text-base-content">
-                      {product.productName}
-                    </h2>
+                    <Link
+                      to={`http://localhost:5173/products/${product._id}`}
+                      className="cursor-pointer hover:text-blue-400"
+                    >
+                      <h2 className="font-semibold text-base-content">
+                        {product.productName}
+                      </h2>
+                    </Link>
                     {product.price && (
                       <span className="whitespace-nowrap font-semibold text-primary">
                         ${product.price}

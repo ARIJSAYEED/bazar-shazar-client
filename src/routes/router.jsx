@@ -6,10 +6,9 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import CreateProductPage from "../pages/CreateProductPage";
 import DashboardPage from "../pages/DashboardPage";
 import CreatedProducts from "../pages/CreatedProducts";
-import authLayout from "../layouts/authLayout";
-import Login from "../pages/authPages/login";
-import Signup from "../pages/authPages/signup";
 import PrivateRoute from "./PrivateRoute";
+import ProductDetailsPage from "../pages/ProductDetailsPage";
+import SignInPage from "../pages/authPages/Signin";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: "products",
         Component: ProductPage,
+      },
+      {
+        path: "products/:id",
+        element: (
+          <PrivateRoute>
+            <ProductDetailsPage></ProductDetailsPage>
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -49,18 +56,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/auth",
-    Component: authLayout,
-    children: [
-      {
-        path: "login",
-        Component: Login,
-      },
-      {
-        path: "signup",
-        Component: Signup,
-      },
-    ],
+    path: "/sign-in",
+    Component: SignInPage,
   },
 ]);
 export default router;

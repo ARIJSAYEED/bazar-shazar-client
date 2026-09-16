@@ -26,7 +26,7 @@ const CreateProductPage = () => {
   const imageUrl = watch("image");
 
   const handleCreateProduct = (data) => {
-    console.log(data);
+    // console.log(data);
     setSubmitting(true);
     axios
       .post("http://localhost:3000/products", data)

@@ -2,16 +2,15 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { Eye, Trash2, PackageSearch, ImageIcon } from "lucide-react";
+import { Eye, Trash2, PackageSearch, ImageIcon, SquarePen } from "lucide-react";
 import { useUser } from "@clerk/react";
+import { Link } from "react-router";
 
 const CreatedProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, isLoaded } = useUser();
-  console.log(user);
   const userEmail = user?.primaryEmailAddress?.emailAddress;
-  console.log("ther user email is", userEmail);
 
   useEffect(() => {
     if (!isLoaded || !userEmail) return;
@@ -45,6 +44,10 @@ const CreatedProducts = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleEdit = (id) => {
+    console.log(id);
   };
 
   return (
@@ -130,9 +133,20 @@ const CreatedProducts = () => {
                       </td>
                       <td>
                         <div className="flex justify-end gap-2">
-                          <button className="btn btn-ghost btn-sm gap-1.5">
+                          <Link
+                            to={`http://localhost:5173/products/${product._id}`}
+                            className="btn btn-ghost btn-sm gap-1.5"
+                          >
                             <Eye size={14} />
                             View Details
+                          </Link>
+                          <button
+                            onClick={() => handleEdit(product._id)}
+                            className="btn btn-ghost btn-sm gap-1.5"
+                          >
+                            {/* <Eye size={14} /> */}
+                            <SquarePen size={14} />
+                            Edit
                           </button>
                           <button
                             onClick={() => handleDelete(product._id)}

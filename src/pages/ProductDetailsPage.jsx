@@ -26,14 +26,7 @@ const ProductDetailsPage = () => {
     axios
       .get(`http://localhost:3000/products/${id}`)
       .then((res) => {
-        // console.log(res.data);
         setProduct(res.data);
-        // if (res.data.acknowledged == true) {
-        //   toast.success("Successfully Deleted the Product!");
-        //   setProducts((prevProducts) =>
-        //     prevProducts.filter((product) => product._id !== id),
-        //   );
-        // }
       })
       .catch((err) => {
         console.log(err);
@@ -111,7 +104,7 @@ const ProductDetailsPage = () => {
                 )}
               </div>
 
-              <h1 className="text-2xl font-semibold text-base-content">
+              <h1 className="text-2xl font-semibold text-base-content capitalize">
                 {product.productName}
               </h1>
 

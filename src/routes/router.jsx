@@ -9,6 +9,8 @@ import CreatedProducts from "../pages/CreatedProducts";
 import PrivateRoute from "./PrivateRoute";
 import ProductDetailsPage from "../pages/ProductDetailsPage";
 import SignInPage from "../pages/authPages/Signin";
+import AboutUs from "../pages/AboutUs";
+import ContactUs from "../pages/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
       {
         path: "products",
         Component: ProductPage,
+      },
+      {
+        path: "about-us",
+        Component: AboutUs,
+      },
+      {
+        path: "contact-us",
+        Component: ContactUs,
       },
       {
         path: "products/:id",

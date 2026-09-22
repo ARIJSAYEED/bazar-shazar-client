@@ -8,6 +8,9 @@ import {
   UserRound,
   Mail,
   PackageSearch,
+  Minus,
+  Plus,
+  ShoppingCart,
 } from "lucide-react";
 import { useUser } from "@clerk/react";
 
@@ -19,8 +22,8 @@ const ProductDetailsPage = () => {
 
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(true);
-
-  console.log(product);
+  const [quantity, setQuantity] = useState(1);
+  const [buying, setBuying] = useState(false);
 
   useEffect(() => {
     axios
@@ -63,6 +66,57 @@ const ProductDetailsPage = () => {
     );
   }
 
+  const isOwner = userEmail === product.ownerEmail;
+  const stock = Number(product.stock) || 0;
+  const outOfStock = stock <= 0;
+
+  const handleDecrease = () => {
+    setQuantity((q) => Math.max(1, q - 1));
+  };
+
+  const handleIncrease = () => {
+    setQuantity((q) => Math.min(stock, q + 1));
+  };
+
+  const handleQuantityChange = (e) => {
+    const val = Number(e.target.value);
+    if (Number.isNaN(val)) return;
+    setQuantity(Math.min(stock, Math.max(1, val)));
+  };
+
+  const handleBuyNow = async () => {
+    if (isOwner || outOfStock || quantity < 1) return;
+
+    setBuying(true);
+    try {
+      const order = {
+        productId: product._id,
+        productName: product.productName,
+        productPrice: product.price,
+        quantity,
+        customerEmail: userEmail,
+        ownerEmail: product.ownerEmail,
+      };
+      console.log(order);
+      // Adjust endpoint/payload to match your backend order route
+      // await axios.post("http://localhost:3000/orders", {
+      //   productId: product._id,
+      //   productName: product.productName,
+      //   productPrice: product.price,
+      //   quantity,
+      //   customerEmail: userEmail,
+      //   ownerEmail: product.ownerEmail,
+      // });
+
+      // e.g. toast.success("Order placed!") or navigate("/orders")
+    } catch (err) {
+      console.log(err);
+      // e.g. toast.error("Something went wrong")
+    } finally {
+      setBuying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-base-200/50 px-4 py-10">
       <div className="mx-auto max-w-4xl">
@@ -98,11 +152,7 @@ const ProductDetailsPage = () => {
                 </span>
               )}
 
-              <div>
-                {userEmail === product.ownerEmail && (
-                  <h1>This is your product</h1>
-                )}
-              </div>
+              <div>{isOwner && <h1>This is your product</h1>}</div>
 
               <h1 className="text-2xl font-semibold text-base-content capitalize">
                 {product.productName}
@@ -121,13 +171,81 @@ const ProductDetailsPage = () => {
               )}
 
               <div className="mt-6 flex flex-wrap items-center gap-2">
-                {product.stock && (
+                {product.stock !== undefined && (
                   <span className="badge badge-outline gap-1">
                     <Boxes size={12} />
                     Stock: {product.stock}
                   </span>
                 )}
               </div>
+
+              {/* Quantity + Buy Now */}
+              {!isOwner && (
+                <div className="mt-6 border-t border-base-200 pt-4">
+                  {outOfStock ? (
+                    <p className="text-sm font-medium text-error">
+                      Out of stock
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mb-2 text-xs font-medium uppercase tracking-wide text-base-content/40">
+                        Quantity
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center rounded-lg border border-base-300">
+                          <button
+                            type="button"
+                            onClick={handleDecrease}
+                            disabled={quantity <= 1}
+                            className="btn btn-ghost btn-sm px-3"
+                            aria-label="Decrease quantity"
+                          >
+                            <Minus size={14} />
+                          </button>
+                          <input
+                            type="number"
+                            min={1}
+                            max={stock}
+                            value={quantity}
+                            onChange={handleQuantityChange}
+                            className="w-14 border-x border-base-300 bg-transparent text-center text-sm font-medium outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleIncrease}
+                            disabled={quantity >= stock}
+                            className="btn btn-ghost btn-sm px-3"
+                            aria-label="Increase quantity"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={handleBuyNow}
+                          disabled={buying}
+                          className="btn btn-primary gap-2 flex-1"
+                        >
+                          {buying ? (
+                            <span className="loading loading-spinner loading-xs"></span>
+                          ) : (
+                            <ShoppingCart size={16} />
+                          )}
+                          Buy Now
+                        </button>
+                      </div>
+
+                      {product.price && (
+                        <p className="mt-2 text-xs text-base-content/50">
+                          Total: $
+                          {(Number(product.price) * quantity).toFixed(2)}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
 
               {(product.ownerName || product.ownerEmail) && (
                 <div className="mt-6 space-y-2 border-t border-base-200 pt-4">

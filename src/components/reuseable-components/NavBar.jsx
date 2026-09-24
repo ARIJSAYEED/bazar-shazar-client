@@ -5,7 +5,7 @@ import {
   Show,
   useAuth,
 } from "@clerk/react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const NavBar = () => {
   const { isSignedIn } = useAuth();
@@ -13,21 +13,21 @@ const NavBar = () => {
   const links = (
     <>
       <li>
-        <Link to="/">home</Link>
+        <NavLink to="/">home</NavLink>
       </li>
       <li>
-        <Link to="/products">products</Link>
+        <NavLink to="/products">products</NavLink>
       </li>
       {isSignedIn && (
         <li>
-          <Link to="/dashboard">dashboard</Link>
+          <NavLink to="/dashboard">dashboard</NavLink>
         </li>
       )}
       <li>
-        <Link to="/about-us">about</Link>
+        <NavLink to="/about-us">about</NavLink>
       </li>
       <li>
-        <Link to="/contact-us">contact</Link>
+        <NavLink to="/contact-us">contact</NavLink>
       </li>
     </>
   );
